@@ -6,11 +6,11 @@ int treasureX, treasureY, enemyX=0, hpX, bgX=640, bgX2=0;
 void setup () {
   size(640,480) ;  // must use this size.
   // my code
-  bgImg = loadImage("assign1/img/bg1.png");
-  bgImg2 = loadImage("assign1/img/bg2.png");
-  appearanceImg = loadImage("assign1/img/hp.png");
-  treasureImg = loadImage("assign1/img/treasure.png");
-  enemyImg = loadImage("assign1/img/enemy.png");
+  bgImg = loadImage("img/bg1.png");
+  bgImg2 = loadImage("img/bg2.png");
+  appearanceImg = loadImage("img/hp.png");
+  treasureImg = loadImage("img/treasure.png");
+  enemyImg = loadImage("img/enemy.png");
   treasureX = floor(random(640));
   treasureY = floor(random(300));
   hpX = int(random(201));
