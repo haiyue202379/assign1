@@ -1,6 +1,6 @@
 /* please implement your assign1 code in this file. */
 
-PImage bgImg, bgImg2, appearanceImg, treasureImg, enemyImg;
+PImage bgImg, bgImg2, appearanceImg, treasureImg, enemyImg, fighterImg;
 int treasureX, treasureY, enemyX=0, hpX, bgX=640, bgX2=0;
 
 void setup () {
@@ -11,6 +11,7 @@ void setup () {
   appearanceImg = loadImage("img/hp.png");
   treasureImg = loadImage("img/treasure.png");
   enemyImg = loadImage("img/enemy.png");
+  fighterImg = loadImage("img/fighter.png");
   treasureX = floor(random(640));
   treasureY = floor(random(300));
   hpX = int(random(201));
@@ -52,11 +53,15 @@ void draw() {
   stroke(0);
   fill(150);
   ellipse(480, 450, 150, 150);
+  textSize(50);
+  fill(0, 102, 153);
+  text("HP", 290, 370); 
   line(160, 450, 310, 450);
   stroke(0);
   fill(30, 255, 0);
   rect(223, 370, hpX, 25);
   image(appearanceImg,215, 370);
+  image(fighterImg,290,420);
   stroke(0);
   fill(255);
   strokeWeight(0.5); 
