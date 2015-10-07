@@ -5,7 +5,7 @@ PImage bgImg;
 void setup () {
   size(640,480) ;  // must use this size.
   // my code
-  bgImg = loadImage("assign1/img/bg2.png");
+  bgImg = loadImage("img/bg2.png");
 }
 
 void draw() {
