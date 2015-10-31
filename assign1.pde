@@ -188,7 +188,7 @@ void keyPressed() {
     
     pValue += (keyCode-48)+"";
 
-  }else if(keyCode == ','){
+  }else if(keyCode == 188){
     pValue += ",";
   }else if(keyCode == BACKSPACE){
     pValue = "";
