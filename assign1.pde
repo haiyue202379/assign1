@@ -18,7 +18,11 @@ void setup() {
   size(1000, 800);
   background(255);
   pValue ="";
+  
+          colorValue = (int)random(255);
+        colorValue2 = (int)random(255);
 }
+
 
 void draw() {
   background(255);
@@ -27,8 +31,7 @@ void draw() {
   fill(0);
   text("FCFS", 10, 100);
   for(int i=1,j=0;i<=FCFSrectXValue.length;i++,j=(int)random(255)){
-        colorValue = (int)random(255);
-        colorValue2 = (int)random(255);
+
         fill(j, colorValue2, colorValue);
         rect(10, 130, FCFSrectXValue[i-1], 50);
   }
@@ -73,8 +76,8 @@ void draw() {
   fill(0);
   text("SJF", 10, 300);
   for(int i=1,j=0;i<=SJFrectXValue.length;i++,j=(int)random(255)){
-        colorValue = (int)random(255);
-        colorValue2 = (int)random(255);
+        //colorValue = (int)random(255);
+        //colorValue2 = (int)random(255);
         fill(j, colorValue2, colorValue);
         rect(10, 330, SJFrectXValue[i-1], 50);
   }
@@ -119,8 +122,8 @@ void draw() {
   fill(0);
   text("RR", 10, 500);
   for(int i=1,j=0;i<=RRrectXValue.length;i++,j=(int)random(255)){
-        colorValue = (int)random(255);
-        colorValue2 = (int)random(255);
+        //colorValue = (int)random(255);
+        //colorValue2 = (int)random(255);
         fill(j, colorValue2, colorValue);
         rect(10, 530, RRrectXValue[RRrectXValue.length-i], 50);
   }
