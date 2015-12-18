@@ -3,125 +3,213 @@ final int GO_DOWN = 1;
 final int GO_LEFT = 2;
 final int GO_UP = 3;
 
-String pValue , WTstr="WT : ( ";
-String pValueArray[] = {};
+StringBuffer Input;
+String Outputstr="There are ";
+int taults=0;
+String InputArray[]={} ;
 int colorValue, colorValue2 ,total=0;
-int pValueInt, q=0;
-int[] FCFSrectXValue = {};
-int[] SJFrectXValue = {};
-int[] RRrectXValue = {};
-int[] SJFpValueArray = {};
-int[] RRpValueArray = {};
-int[] RRprocess = {};
+int columns=0;
+int row[]={};
+int IntArray[]={},OPRAArray[] = new int[]{0,0,0,0,0,0,0,0,0,0},LRU[]={};
+boolean tf=true,loop=true; 
 
 void setup() {
-  size(1000, 800);
+  size(1600, 1100);
   background(255);
-  pValue ="";
-  
-          colorValue = (int)random(255);
-        colorValue2 = (int)random(255);
+  Input=new StringBuffer();
 }
-
 
 void draw() {
   background(255);
-  //FCFS------------------------------------------------------------------------------------start
-  textSize(22);
   fill(0);
-  text("FCFS", 10, 100);
-  for(int i=1,j=0;i<=FCFSrectXValue.length;i++,j=(int)random(255)){
-
-        fill(j, colorValue2, colorValue);
-        rect(10, 130, FCFSrectXValue[i-1], 50);
-  }
-
-  for(int i=1;i<=FCFSrectXValue.length;i++){
-        textSize(22);
-        fill(0);
-        if(i>=FCFSrectXValue.length){
-                text("P"+(FCFSrectXValue.length-i+1), 10, 165); 
-        }else{
-                text("P"+(FCFSrectXValue.length-i+1), FCFSrectXValue[i]+10, 165); 
-        }
-  }
-  
-  for(int i=0,j=0;i<pValueArray.length;i++){
-        textSize(22);
-        fill(0);
-        if(i>=FCFSrectXValue.length){
-                text(0, 10, 210); 
-        }else{
-                j=j+Integer.parseInt(pValueArray[i]);
-                text(j, FCFSrectXValue[FCFSrectXValue.length-i-1], 210); 
-        }
-  }
-  
-  for(int i=0,j=0;i<pValueArray.length-1;i++){
-    WTstr+=j;
-    total+=j;
-    j=j+Integer.parseInt(pValueArray[i]);
-    if(i!=FCFSrectXValue.length-1)
-      WTstr+="+";
-    else
-      WTstr+=" )/"+FCFSrectXValue.length+"= "+(float)total/FCFSrectXValue.length;
-  }
-  text(WTstr, 10, 240);
-  total=0;
-  WTstr="WT : ( ";
-  //FCFS--------------------------------------------------------------------------------------------------end
-  
-  
-  
-  
   textSize(25);
-  fill(0);
-  text("Please enter 1<=process<=10 (the last number is q) :", 30, 30);  
-  
+  text("Please enter 0<=process<=9 :                               mouse button left:FIFO , right:OPRA , middle:LRU", 30, 30);  
   textSize(20);
+  text(Input.toString(), 40, 40, 800, 80);
+ }
+ 
+void FIFO(){
   fill(0);
-  text(pValue, 40, 40, 800, 80);
+  textSize(22);
+  text("FIFO", 10, 100);
+  for(int i=0;i<columns;i++){
+    row[i]=-1;
+  }
+  for(int i=0,now=0;i<IntArray.length;i++){
+    fill(0);
+    text(IntArray[i], 25+i*50, 130);
+    for(int j=0;j<columns;j++){
+      if(IntArray[i]!=row[j]) continue;
+      else {j=columns; tf=false;}
+    }
+    if(tf){
+      row[now]=IntArray[i];
+      now++;
+      taults++;
+      if(now>=columns)now=0;
+      for(int k=0;k<columns;k++){
+        fill(255, 255, 255);
+        rect(10+i*50, 160+k*40, 40, 40);
+        if(row[k]>=0){
+          fill(0);
+          text(row[k],25+i*50,190+k*40);
+        }
+        else continue;
+      }
+    }
+    tf=true;
+  }
+  text(Outputstr+taults+" taults",10,450);
+  tf=true;
+  taults=0;
+}
+
+void OPRA(){
+  fill(0);
+  textSize(22);
+  text("OPRA", 10, 100);
+  for(int i=0;i<columns;i++){
+    row[i]=-1;
+  }
+  for(int i=0;i<10;i++){
+    OPRAArray[i]=0;
+  }
+  for(int i=0;i<IntArray.length;i++){
+    OPRAArray[IntArray[i]]++;
+  }
+  for(int p=0;p<columns;p++){
+    LRU[p]=p;
+  }
+  for(int i=0,now=0;i<IntArray.length;i++){
+    fill(0);
+    text(IntArray[i], 25+i*50, 130);
+    for(int j=0;j<columns;j++){
+      if(IntArray[i]!=row[j]) continue;
+      else {change(i,find(j)); now=LRU[0]; j=columns; tf=false;}
+    }
+    if(tf){
+      if(row[now]!=-1){
+        for(int m=0;m<columns;m++){
+          if(OPRAArray[row[now]]>OPRAArray[row[m]]) now=m;
+        }
+        change(i,find(now));
+        row[now]=IntArray[i];
+        now=LRU[0];
+        taults++;
+      }
+      else{
+        row[now]=IntArray[i];
+        change(i,0);
+        now=LRU[0];
+        taults++;
+      }
+      for(int k=0;k<columns;k++){
+        fill(255, 255, 255);
+        rect(10+i*50, 160+k*40, 40, 40);
+        if(row[k]>=0){
+          fill(0);
+          text(row[k],25+i*50,190+k*40);
+        }
+        else continue;
+      }
+    }
+    tf=true;
+  }
+  text(Outputstr+taults+" taults",10,450);
+  tf=true;
+  taults=0;
+}  
+
+void LRU(){
+  fill(0);
+  textSize(22);
+  text("LRU", 10, 100);
+  for(int i=0;i<columns;i++){
+    row[i]=-1;
+  }
+  for(int p=0;p<columns;p++){
+    LRU[p]=p;
+  }
+  for(int i=0,now=0;i<IntArray.length;i++){
+    fill(0);
+    text(IntArray[i], 25+i*50, 130);
+    for(int j=0;j<columns;j++){
+      if(IntArray[i]!=row[j]) continue;
+      else {change(i,find(j)); now=LRU[0]; j=columns; tf=false;}
+    }
+    if(tf){
+      row[now]=IntArray[i];
+      change(i,0);
+      now=LRU[0];
+      taults++;
+      for(int k=0;k<columns;k++){
+        fill(255, 255, 255);
+        rect(10+i*50, 160+k*40, 40, 40);
+        if(row[k]>=0){
+          fill(0);
+          text(row[k],25+i*50,190+k*40);
+        }
+        else continue;
+      }
+    }
+    tf=true;
+  }
+  text(Outputstr+taults+" taults",10,450);
+  tf=true;
+  taults=0;
+}
+
+void change(int i,int l){
+  if(l<0){println("error");}
+  int ch=LRU[l];
+  for(int n=l;n<columns-1;n++){
+    LRU[n]=LRU[n+1];
+  }
+  LRU[columns-1]=ch;
+}
+
+int find(int n){
+  for(int i=0;i<columns;i++){
+    if(LRU[i]==n) return i;
+  }
+  return -1;
+}
   
-} 
+ 
 
 void keyPressed() {
   if (keyCode  >= '0' && keyCode  <= '9' ) {
-    
-    pValue += (keyCode-48)+"";
-
-  }else if(keyCode == 188){
-    pValue += ",";
+    Input.append(keyCode-48);
+  }else if(keyCode == ','){
+    Input.append(',');
   }else if(keyCode == BACKSPACE){
-    pValue = "";
+    if(Input.length()>0) Input.deleteCharAt(Input.length()-1);
+  }else if(keyCode == DELETE){
+    Input.delete(0,Input.length());
   }else if(keyCode == ENTER){
-    pValueArray = pValue.split(",");
-    q=Integer.parseInt(pValueArray[pValueArray.length-1]);
-    RRpValueArray = new int[pValueArray.length-1];
-    SJFpValueArray = new int[pValueArray.length-1];
-    FCFSrectXValue = new int[pValueArray.length-1];
-    SJFrectXValue = new int[pValueArray.length-1];
-//FCFSValue----------------------------------------------------------------------------------------------start
-    for(int i=1;i<=FCFSrectXValue.length;i++)
-      {     
-         pValueInt+=Integer.parseInt(pValueArray[i-1]);
-      }
-    
-    pValueInt = 900/pValueInt;
-    
-    for(int i=0;i<FCFSrectXValue.length;i++)
+    InputArray = Input.toString().split(",");
+    IntArray = new int[InputArray.length-1];
+    columns=Integer.parseInt(InputArray[InputArray.length-1]);
+    row = new int[columns];
+    LRU = new int[columns];
+    for(int i=0;i<InputArray.length-1;i++)
       {         
-        if(i==0){
-                FCFSrectXValue[i] = pValueInt*Integer.parseInt(pValueArray[i]);
-        }else{
-                FCFSrectXValue[i] = FCFSrectXValue[i-1]+pValueInt*Integer.parseInt(pValueArray[i]);
-        }
+        IntArray[i] = Integer.parseInt(InputArray[i]);
       }
-      FCFSrectXValue=reverse(FCFSrectXValue);
-//FCFSValue-----------------------------------------------------------------------------------------------end
-
-
-    pValueInt=0;
-    total=0;
   }
   
+}
+void mousePressed() {
+  loop=!loop;
+  if(loop)
+    loop();
+  else
+    noLoop();
+  if (mouseButton == LEFT) {
+    FIFO();
+  } else if (mouseButton == RIGHT) {
+    OPRA();
+  } else {
+    LRU();
+  }
 }
