@@ -1,215 +1,79 @@
-final int GO_RIGHT = 0;
-final int GO_DOWN = 1;
-final int GO_LEFT = 2;
-final int GO_UP = 3;
+/* please implement your assign1 code in this file. */
 
-StringBuffer Input;
-String Outputstr="There are ";
-int taults=0;
-String InputArray[]={} ;
-int colorValue, colorValue2 ,total=0;
-int columns=0;
-int row[]={};
-int IntArray[]={},OPRAArray[] = new int[]{0,0,0,0,0,0,0,0,0,0},LRU[]={};
-boolean tf=true,loop=true; 
+PImage bgImg, bgImg2, appearanceImg, treasureImg, enemyImg, fighterImg;
+int treasureX, treasureY, enemyX=0, hpX, bgX=640, bgX2=0;
 
-void setup() {
-  size(1600, 1100);
-  background(255);
-  Input=new StringBuffer();
+void setup () {
+  size(640,480) ;  // must use this size.
+  // my code
+  bgImg = loadImage("assign1/img/bg1.png");
+  bgImg2 = loadImage("assign1/img/bg2.png");
+  appearanceImg = loadImage("assign1/img/hp.png");
+  treasureImg = loadImage("assign1/img/treasure.png");
+  enemyImg = loadImage("assign1/img/enemy.png");
+  fighterImg = loadImage("assign1/img/fighter.png");
+  treasureX = floor(random(640));
+  treasureY = floor(random(300));
+  hpX = int(random(201));
 }
 
 void draw() {
-  background(255);
+  // my code
+  bgX++;
+  bgX2++;
+  image(bgImg,640-(bgX%1280),0);
+  image(bgImg2,640-(bgX2%1280),0);
+  image(treasureImg,treasureX,treasureY);
+  image(enemyImg,(enemyX++)%640,210);
+  //frame
+  strokeWeight(0);
+  stroke(0);
+  fill(255,90);
+  rect(0, 0, 640, 480);
+  strokeWeight(12); 
+  stroke(0);
+  fill(162,0);
+  ellipse(40, 360, 320, 900);
+  ellipse(37, 380, 320, 900);
+  ellipse(600, 360, 320, 900);
+  ellipse(603, 380, 320, 900);
+  strokeWeight(2); 
+  stroke(0);
+  fill(162);
+  ellipse(320, 480, 700, 320);
+  stroke(0);
   fill(0);
-  textSize(25);
-  text("Please enter 0<=process<=9 :                               mouse button left:FIFO , right:OPRA , middle:LRU", 30, 30);  
-  textSize(20);
-  text(Input.toString(), 40, 40, 800, 80);
- }
- 
-void FIFO(){
-  fill(0);
-  textSize(22);
-  text("FIFO", 10, 100);
-  for(int i=0;i<columns;i++){
-    row[i]=-1;
-  }
-  for(int i=0,now=0;i<IntArray.length;i++){
-    fill(0);
-    text(IntArray[i], 25+i*50, 130);
-    for(int j=0;j<columns;j++){
-      if(IntArray[i]!=row[j]) continue;
-      else {j=columns; tf=false;}
-    }
-    if(tf){
-      row[now]=IntArray[i];
-      now++;
-      taults++;
-      if(now>=columns)now=0;
-      for(int k=0;k<columns;k++){
-        fill(255, 255, 255);
-        rect(10+i*50, 160+k*40, 40, 40);
-        if(row[k]>=0){
-          fill(0);
-          text(row[k],25+i*50,190+k*40);
-        }
-        else continue;
-      }
-    }
-    tf=true;
-  }
-  text(Outputstr+taults+" taults",10,450);
-  tf=true;
-  taults=0;
-}
-
-void OPRA(){
-  fill(0);
-  textSize(22);
-  text("OPRA", 10, 100);
-  for(int i=0;i<columns;i++){
-    row[i]=-1;
-  }
-  for(int i=0;i<10;i++){
-    OPRAArray[i]=0;
-  }
-  for(int i=0;i<IntArray.length;i++){
-    OPRAArray[IntArray[i]]++;
-  }
-  for(int p=0;p<columns;p++){
-    LRU[p]=p;
-  }
-  for(int i=0,now=0;i<IntArray.length;i++){
-    fill(0);
-    text(IntArray[i], 25+i*50, 130);
-    for(int j=0;j<columns;j++){
-      if(IntArray[i]!=row[j]) continue;
-      else {change(i,find(j)); now=LRU[0]; j=columns; tf=false;}
-    }
-    if(tf){
-      if(row[now]!=-1){
-        for(int m=0;m<columns;m++){
-          if(OPRAArray[row[now]]>OPRAArray[row[m]]) now=m;
-        }
-        change(i,find(now));
-        row[now]=IntArray[i];
-        now=LRU[0];
-        taults++;
-      }
-      else{
-        row[now]=IntArray[i];
-        change(i,0);
-        now=LRU[0];
-        taults++;
-      }
-      for(int k=0;k<columns;k++){
-        fill(255, 255, 255);
-        rect(10+i*50, 160+k*40, 40, 40);
-        if(row[k]>=0){
-          fill(0);
-          text(row[k],25+i*50,190+k*40);
-        }
-        else continue;
-      }
-    }
-    tf=true;
-  }
-  text(Outputstr+taults+" taults",10,450);
-  tf=true;
-  taults=0;
-}  
-
-void LRU(){
-  fill(0);
-  textSize(22);
-  text("LRU", 10, 100);
-  for(int i=0;i<columns;i++){
-    row[i]=-1;
-  }
-  for(int p=0;p<columns;p++){
-    LRU[p]=p;
-  }
-  for(int i=0,now=0;i<IntArray.length;i++){
-    fill(0);
-    text(IntArray[i], 25+i*50, 130);
-    for(int j=0;j<columns;j++){
-      if(IntArray[i]!=row[j]) continue;
-      else {change(i,find(j)); now=LRU[0]; j=columns; tf=false;}
-    }
-    if(tf){
-      row[now]=IntArray[i];
-      change(i,0);
-      now=LRU[0];
-      taults++;
-      for(int k=0;k<columns;k++){
-        fill(255, 255, 255);
-        rect(10+i*50, 160+k*40, 40, 40);
-        if(row[k]>=0){
-          fill(0);
-          text(row[k],25+i*50,190+k*40);
-        }
-        else continue;
-      }
-    }
-    tf=true;
-  }
-  text(Outputstr+taults+" taults",10,450);
-  tf=true;
-  taults=0;
-}
-
-void change(int i,int l){
-  if(l<0){println("error");}
-  int ch=LRU[l];
-  for(int n=l;n<columns-1;n++){
-    LRU[n]=LRU[n+1];
-  }
-  LRU[columns-1]=ch;
-}
-
-int find(int n){
-  for(int i=0;i<columns;i++){
-    if(LRU[i]==n) return i;
-  }
-  return -1;
-}
-  
- 
-
-void keyPressed() {
-  if (keyCode  >= '0' && keyCode  <= '9' ) {
-    Input.append(keyCode-48);
-  }else if(keyCode == ','){
-    Input.append(',');
-  }else if(keyCode == BACKSPACE){
-    if(Input.length()>0) Input.deleteCharAt(Input.length()-1);
-  }else if(keyCode == DELETE){
-    Input.delete(0,Input.length());
-  }else if(keyCode == ENTER){
-    InputArray = Input.toString().split(",");
-    IntArray = new int[InputArray.length-1];
-    columns=Integer.parseInt(InputArray[InputArray.length-1]);
-    row = new int[columns];
-    LRU = new int[columns];
-    for(int i=0;i<InputArray.length-1;i++)
-      {         
-        IntArray[i] = Integer.parseInt(InputArray[i]);
-      }
-  }
-  
-}
-void mousePressed() {
-  loop=!loop;
-  if(loop)
-    loop();
-  else
-    noLoop();
-  if (mouseButton == LEFT) {
-    FIFO();
-  } else if (mouseButton == RIGHT) {
-    OPRA();
-  } else {
-    LRU();
-  }
+  ellipse(320, 490, 690, 320);
+  //end frame
+  //appearance
+  strokeWeight(2); 
+  stroke(0);
+  fill(150, 255, 0);
+  ellipse(160, 450, 150, 150);
+  stroke(0);
+  fill(150);
+  ellipse(480, 450, 150, 150);
+  textSize(50);
+  fill(0, 102, 153);
+  text("HP", 290, 370); 
+  line(160, 450, 310, 450);
+  stroke(0);
+  fill(30, 255, 0);
+  rect(223, 370, hpX, 25);
+  image(appearanceImg,215, 370);
+  image(fighterImg,290,420);
+  stroke(0);
+  fill(255);
+  strokeWeight(0.5); 
+  stroke(0);
+  fill(255,1);
+  ellipse(320, 230, 150, 150);
+  stroke(0);
+  fill(255,2);
+  ellipse(320, 230, 100, 100);
+  line(340, 230, 410, 230);
+  line(230, 230, 300, 230);
+  line(320, 210, 320, 140);
+  line(320, 250, 320, 320);
+  //end appearance
 }
